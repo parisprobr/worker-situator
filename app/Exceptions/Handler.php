@@ -47,4 +47,18 @@ class Handler extends ExceptionHandler
             //
         });
     }
+    public function render($request, Throwable $exception)
+    {
+        if ($exception instanceof \Illuminate\Validation\ValidationException){
+            return response()->json($exception->getMessage())->setStatusCode(400);
+        }
+        if($exception instanceof  \Illuminate\Validation\UnauthorizedException){
+            return response()->json($exception->getMessage())->setStatusCode(403);
+        }
+        
+        if(env('APP_DEBUG')){
+            dd($exception);
+        }
+    }
+
 }

@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\SituatorController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,4 +19,5 @@ use App\Http\Controllers\UserController;
 Route::group([ 'middleware' => ['auth:sanctum']], function (){
     Route::post('/user/create', [UserController::class, 'store']);
     Route::post('/user/createToken', [UserController::class, 'createToken']);
+    Route::post('/situator/create', [SituatorController::class, 'createUser']);
 });
