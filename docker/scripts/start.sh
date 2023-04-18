@@ -8,7 +8,7 @@ while [ ! -f /app/vendor/autoload.php ]; do
     sleep 2;
 done
 
-while [ ! -d /app/database/mysql/apiusersys ]; do
+while [ ! -d /app/database/mysql/workersituator ]; do
     echo "Aguardando install do Mysql"
     sleep 2;
 done
@@ -21,7 +21,7 @@ php artisan key:generate
 #Cria a tabela migration dentro do banco
 php artisan migrate:install
 
-#Cria toda a estrutura do banco apixgen e cria usuario admin
+#Cria toda a estrutura do banco workersituator e cria usuario admin
 php artisan migrate
 
 #Start dos servicos
