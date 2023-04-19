@@ -19,5 +19,6 @@ use App\Http\Controllers\SituatorController;
 Route::group([ 'middleware' => ['auth:sanctum']], function (){
     Route::post('/user/create', [UserController::class, 'store']);
     Route::post('/user/createToken', [UserController::class, 'createToken']);
-    Route::post('/situator/create', [SituatorController::class, 'createUser']);
+    Route::post('/situator/user/create', [SituatorController::class, 'createUser']);
+    Route::get('/situator/user/{name}', [SituatorController::class, 'getUserByName']);
 });
