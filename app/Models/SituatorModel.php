@@ -50,4 +50,10 @@ class SituatorModel
         $this->simpleLogin($idSituator);
         return $this->repository->deletePeopleByCpf($cpf);
     }
+
+    public function setPeopleImage(int $idSituator, string $cpf,string $base64)
+    {
+        $this->simpleLogin($idSituator);
+        return $this->repository->setPeopleImage($cpf, $base64);
+    }
 }

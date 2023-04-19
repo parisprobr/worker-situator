@@ -92,6 +92,28 @@ class SituatorController extends Controller
         ]);
     }
 
+    public function setPeopleImage(Request $request)
+    {   
+        $request->merge([
+            'idSituator' => $request->header('idSituator'),
+            'cpf'        => $request->route('cpf'),
+            'base64'        => $request->get('base64'),
+        ]);
+        $request->validate([
+            'idSituator' => ['required', 'Integer'],
+            'cpf'        => ['required', 'String'],
+            'base64'     => ['required', 'String']
+        ]);
+
+        return response()->json([
+            'response' => $this->model->setPeopleImage(
+                (int) $request->header('idSituator'),
+                $request->route('cpf'),
+                $request->get('base64')  
+            )
+        ]);
+    }
+
     public function getPeopleByCpf(Request $request)
     {
         $request->merge([

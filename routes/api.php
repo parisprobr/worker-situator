@@ -20,6 +20,7 @@ Route::group([ 'middleware' => ['auth:sanctum']], function (){
     Route::post('/user/create', [UserController::class, 'store']);
     Route::post('/user/createToken', [UserController::class, 'createToken']);
     Route::post('/situator/people/create', [SituatorController::class, 'createPeople']);
+    Route::post('/situator/people/{cpf}/image', [SituatorController::class, 'setPeopleImage']);
     Route::get('/situator/people/{cpf}', [SituatorController::class, 'getPeopleByCpf']);
     Route::delete('/situator/people/{cpf}', [SituatorController::class, 'deletePeopleByCpf']);
 });

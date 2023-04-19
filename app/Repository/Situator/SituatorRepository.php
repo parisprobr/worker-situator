@@ -19,6 +19,7 @@ class SituatorRepository
     const ENDPOINT_CURRENT_USER = '/current-user';
     const ENDPOINT_PEOPLE       = '/people';
     const ENDPOINT_ACCOUNTS     = '/accounts';
+    const ENDPOINT_IMAGE     = '/image';
     const FILTER_CPF            = 'pagination.filters.cpf=';
     const DEPARTMENT            = 'ES';
     const HTTP_NOT_FOUND        = 404;
@@ -80,5 +81,28 @@ class SituatorRepository
             throw new ClientException('Unable to remove user Id'.$people['id']);
         }
         return 'User Removed';
+    }
+
+    public function setPeopleImage(string $cpf, string $base64)
+    {   
+        $people = $this->getPeopleByCpf($cpf);
+        if (!$this->peopleBelongsEs($people)) {
+            throw new ClientException('People Id:' . $people['id'] . ' not Belongs ES', 403);
+        }
+
+        $body     = ['base64' => $base64];
+        $bodyJson = json_encode($body);
+
+        $request = new Request(
+            'PUT',
+            $this->getFormattedUrlToPeople() . '/' . $people['id'].self::ENDPOINT_IMAGE,
+            self::HEADER,
+            $bodyJson
+        );
+        $res = $this->client->sendAsync($request)->wait();
+        if($res->getStatusCode() != self::HTTP_OK){
+            throw new ClientException('Unable to change image for user Id'.$people['id']);
+        }
+        return 'successfully changed image';
     }
 }
