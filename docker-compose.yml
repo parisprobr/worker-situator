@@ -44,18 +44,6 @@ services:
             - /etc/passwd:/etc/passwd:ro
             - /etc/group:/etc/group:ro
 
-    nginx-proxy:
-        image: 'jc21/nginx-proxy-manager:latest'
-        container_name: nginx-proxy
-        restart: unless-stopped
-        ports:
-            - '80:80'
-            - '81:81'
-            - '443:443'
-        volumes:
-            - ../worker-situator/storage/nginx-proxy-manager:/data
-            - ../worker-situator/storage/:/etc/letsencrypt
-
     worker-situator-db:
         container_name: worker-situator-db
         environment:
@@ -68,9 +56,9 @@ services:
             - ../worker-situator/database/mysql:/var/lib/mysql
         env_file: ../worker-situator/.env
 
-    phpmyadmin:
+    phpmyadmin-es:
         image: phpmyadmin/phpmyadmin
-        container_name: phpmyadmin
+        container_name: phpmyadmin-es
         restart: on-failure
         links:
             - worker-situator-db
