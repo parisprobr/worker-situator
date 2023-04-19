@@ -1,5 +1,7 @@
 <?php
 namespace App\Repository\Situator;
+
+use App\Models\PeopleModel;
 use GuzzleHttp\Client as guzz;
 use GuzzleHttp\Psr7\Request;
 
@@ -69,7 +71,7 @@ trait LoginSituatorTrait{
 
         $bodyJson = json_encode($body);
         $request = new Request('PUT', $this->apiUrl.self::ENDPOINT_LOGIN, self::HEADER, $bodyJson);
-        $this->client->sendAsync($request)->wait();
+        $res = $this->client->sendAsync($request)->wait();
         $this->setCookieLogin();
         $this->checkCurrentUser();
         //return($res->getBody()->getContents());  

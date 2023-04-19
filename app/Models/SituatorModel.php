@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Models;
+
 use App\Repository\Situator\SituatorRepository;
 use App\Repository\EntradaSeguraRepository;
 
@@ -9,9 +11,9 @@ class SituatorModel
     private EntradaSeguraRepository $repositoryEs;
 
     public function __construct()
-    {   
-        $this->repository   = New SituatorRepository();
-        $this->repositoryEs = New EntradaSeguraRepository();
+    {
+        $this->repository   = new SituatorRepository();
+        $this->repositoryEs = new EntradaSeguraRepository();
     }
 
     private function simpleLogin(int $idSituator)
@@ -21,28 +23,31 @@ class SituatorModel
             $data['apiUrl'],
             $data['userName'],
             $data['password'],
-            $data['accountId'], 
+            $data['accountId'],
             $data['rememberMe']
         );
     }
-    
-    public function createPeople(int $idSituator,int $idEs)
-    {     
+
+    public function createPeople(
+        int $idSituator,
+        int $idEs,
+        PeopleModel $people
+    ) {
+       
         $this->simpleLogin($idSituator);
-        return $this->repository->createPeople($idEs);
+        return $this->repository->createPeople($people);
     }
-    
-    public function getPeopleByCpf(int $idSituator,string $cpf)
-    {   
+
+    public function getPeopleByCpf(int $idSituator, string $cpf)
+    {
         $this->simpleLogin($idSituator);
         return $this->repository->getPeopleByCpf($cpf);
     }
 
 
-    public function deletePeopleByCpf(int $idSituator,string $cpf)
-    {     
+    public function deletePeopleByCpf(int $idSituator, string $cpf)
+    {
         $this->simpleLogin($idSituator);
         return $this->repository->deletePeopleByCpf($cpf);
     }
-
 }
