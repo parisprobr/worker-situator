@@ -15,10 +15,10 @@ class SituatorController extends Controller
         $this->model = new SituatorModel();
     }
 
-    public function createUser(Request $request)
+    public function createPeople(Request $request)
     {
         $request->merge([
-            'idSituator' => $request->get('idSituator'),
+            'idSituator' => $request->header('idSituator'),
             'idEs'       => $request->get('idEs'),
         ]);
 
@@ -28,29 +28,49 @@ class SituatorController extends Controller
         ]);
 
         return response()->json([
-            'createUser: ' => $this->model->createUser(
-                $request->get('idSituator'),
-                $request->get('idEs'),
+            'response' => $this->model->createPeople(
+                (int) $request->header('idSituator'),
+                (int) $request->get('idEs'),
             )
         ]);
     }
 
-    public function getUserByName(Request $request)
+    public function deletePeopleByCpf(Request $request)
     {   
         $request->merge([
             'idSituator' => $request->header('idSituator'),
-            'name'       => $request->route('name'),
+            'cpf'        => $request->route('cpf'),
         ]);
 
         $request->validate([
             'idSituator' => ['required', 'Integer'],
-            'name'       => ['required', 'String']
+            'cpf'       => ['required', 'String']
         ]);
 
         return response()->json([
-            'getUserByName: ' => $this->model->getUserByName(
-                $request->header('idSituator'),
-                $request->route('name'),
+            'response' => $this->model->deletePeopleByCpf(
+                (int) $request->header('idSituator'),
+                 $request->route('cpf'),
+            )
+        ]);
+    }
+
+    public function getPeopleByCpf(Request $request)
+    {   
+        $request->merge([
+            'idSituator' => $request->header('idSituator'),
+            'cpf'        => $request->route('cpf'),
+        ]);
+
+        $request->validate([
+            'idSituator' => ['required', 'Integer'],
+            'cpf'       => ['required', 'String']
+        ]);
+
+        return response()->json([
+            'response' => $this->model->getPeopleByCpf(
+                (int) $request->header('idSituator'),
+                 $request->route('cpf'),
             )
         ]);
     }

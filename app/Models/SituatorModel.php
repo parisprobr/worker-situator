@@ -12,27 +12,37 @@ class SituatorModel
     {   
         $this->repository   = New SituatorRepository();
         $this->repositoryEs = New EntradaSeguraRepository();
-
     }
 
-    public function createUser($idSituator,$idEs)
-    {     
+    private function simpleLogin(int $idSituator)
+    {
         $data = $this->repositoryEs->getDataLogin($idSituator);
-        $login = $this->repository->login(
+        $this->repository->login(
             $data['apiUrl'],
             $data['userName'],
             $data['password'],
             $data['accountId'], 
             $data['rememberMe']
         );
-        return $this->repository->createUser($idSituator, $idEs);
     }
-
-    public function getUserByName($idSituator, $name)
+    
+    public function createPeople(int $idSituator,int $idEs)
+    {     
+        $this->simpleLogin($idSituator);
+        return $this->repository->createPeople($idEs);
+    }
+    
+    public function getPeopleByCpf(int $idSituator,string $cpf)
     {   
-        dd('aaaaa');
-        dd($idSituator, $name);
+        $this->simpleLogin($idSituator);
+        return $this->repository->getPeopleByCpf($cpf);
     }
 
+
+    public function deletePeopleByCpf(int $idSituator,string $cpf)
+    {     
+        $this->simpleLogin($idSituator);
+        return $this->repository->deletePeopleByCpf($cpf);
+    }
 
 }

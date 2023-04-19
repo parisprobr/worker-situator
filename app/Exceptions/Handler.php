@@ -3,6 +3,9 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use GuzzleHttp\Exception\ClientException as GuzzleClientException;
+
+
 use Throwable;
 
 class Handler extends ExceptionHandler
@@ -47,13 +50,28 @@ class Handler extends ExceptionHandler
             //
         });
     }
+
     public function render($request, Throwable $exception)
     {
         if ($exception instanceof \Illuminate\Validation\ValidationException){
-            return response()->json($exception->getMessage())->setStatusCode(400);
+            return response()->json(['Error' => $exception->getMessage()])->setStatusCode($exception->getCode());
         }
         if($exception instanceof  \Illuminate\Validation\UnauthorizedException){
-            return response()->json($exception->getMessage())->setStatusCode(403);
+            return response()->json(['Error' => $exception->getMessage()])->setStatusCode($exception->getCode());
+        }
+        if($exception instanceof ClientException){
+            return response()->json(['Error' => $exception->getMessage()])->setStatusCode($exception->getCode());
+        }
+        if($exception instanceof  GuzzleClientException){
+            $response = $exception->getResponse();
+            $responseBodyAsString = $response->getBody()->getContents();
+            return response()->json(
+                [   
+                'Error' => 'ExceptionMessage: '.$exception->getMessage().
+                    ' ReasonPhrase: '.$response->getReasonPhrase().
+                    ' ResponseBody: '.$responseBodyAsString,
+                ]
+            )->setStatusCode($exception->getCode());
         }
         
         if(env('APP_DEBUG')){
