@@ -4,6 +4,8 @@ namespace App\Repository\Situator;
 use App\Models\PeopleModel;
 use GuzzleHttp\Client as guzz;
 use GuzzleHttp\Psr7\Request;
+use App\Exceptions\ClientException;
+
 
 trait LoginSituatorTrait{
 

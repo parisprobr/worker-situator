@@ -56,4 +56,26 @@ class SituatorModel
         $this->simpleLogin($idSituator);
         return $this->repository->setPeopleImage($cpf, $base64);
     }
+
+    public function getPeopleAccessByCpf(int $idSituator, string $cpf)
+    {
+        $this->simpleLogin($idSituator);
+        $people = $this->repository->getPeopleByCpf($cpf);
+        return $this->repository->getAccessByPeopleId($people['id']);
+    }
+
+    public function deletePeopleAccessByCpf(int $idSituator, string $cpf)
+    {
+        $this->simpleLogin($idSituator);
+        $people = $this->repository->getPeopleByCpf($cpf);
+        return $this->repository->deleteAccessByPeopleId($people['id']);
+    }
+
+    public function setPeopleAccessByCpf(int $idSituator, string $cpf, PeopleAccessModel $accessModel)
+    {
+        $this->simpleLogin($idSituator);
+        $people = $this->repository->getPeopleByCpf($cpf);
+        return $this->repository->setAccessByPeopleId($people['id'],$accessModel);
+    }
+
 }

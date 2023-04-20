@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\PeopleAccessModel;
 use Illuminate\Http\Request;
 use App\Models\SituatorModel;
 use App\Models\PeopleModel;
@@ -16,6 +17,7 @@ class SituatorController extends Controller
         $this->model = new SituatorModel();
     }
 
+    
 
     public function createPeople(Request $request)
     {   
@@ -101,7 +103,7 @@ class SituatorController extends Controller
     }
 
     public function getPeopleByCpf(Request $request)
-    {
+    {   
         $request->merge([
             'idSituator' => $request->header('idSituator'),
             'cpf'        => $request->route('cpf'),
@@ -119,4 +121,81 @@ class SituatorController extends Controller
             )
         ]);
     }
+
+
+    public function getPeopleAccessByCpf(Request $request)
+    {   
+        $request->merge([
+            'idSituator' => $request->header('idSituator'),
+            'cpf'        => $request->route('cpf'),
+        ]);
+
+        $request->validate([
+            'idSituator' => ['required', 'Integer'],
+            'cpf'       => ['required', 'String']
+        ]);
+
+        return response()->json([
+            'response' => $this->model->getPeopleAccessByCpf(
+                (int) $request->header('idSituator'),
+                $request->route('cpf'),
+            )
+        ]);
+    }
+
+    public function deletePeopleAccessByCpf(Request $request)
+    {   
+        $request->merge([
+            'idSituator' => $request->header('idSituator'),
+            'cpf'        => $request->route('cpf'),
+        ]);
+
+        $request->validate([
+            'idSituator' => ['required', 'Integer'],
+            'cpf'       => ['required', 'String']
+        ]);
+
+        return response()->json([
+            'response' => $this->model->deletePeopleAccessByCpf(
+                (int) $request->header('idSituator'),
+                $request->route('cpf'),
+            )
+        ]);
+    }
+
+    public function setPeopleAccessByCpf(Request $request)
+    {
+        $request->merge([
+            'idSituator' => $request->header('idSituator'),
+            'cpf'        => $request->route('cpf'),
+        ]);
+        $request->merge($request->all());
+        
+        $request->validate([
+            'idSituator' => ['required', 'Integer'],
+            'cpf'        => ['required', 'String']
+        ]);
+        $access = new PeopleAccessModel(
+            (int) $request->get('pin'),
+            (int) $request->get('apartment'),
+            $request->get('block'),
+            $request->get('administrator'),
+            $request->get('startDate'),
+            $request->get('validity'),
+            $request->get('password'),
+            (int) $request->get('parentId'),
+            $request->get('imported'),
+            $request->get('active'),
+            (int) $request->get('type')
+        );
+
+        return response()->json([
+            'response' => $this->model->setPeopleAccessByCpf(
+                (int) $request->header('idSituator'),
+                $request->route('cpf'),
+                $access
+            )
+        ]);
+    }
+
 }

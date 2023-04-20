@@ -23,4 +23,7 @@ Route::group([ 'middleware' => ['auth:sanctum']], function (){
     Route::post('/situator/people/{cpf}/image', [SituatorController::class, 'setPeopleImage']);
     Route::get('/situator/people/{cpf}', [SituatorController::class, 'getPeopleByCpf']);
     Route::delete('/situator/people/{cpf}', [SituatorController::class, 'deletePeopleByCpf']);
+    Route::get('/situator/people/{cpf}/access', [SituatorController::class, 'getPeopleAccessByCpf']);
+    Route::post('/situator/people/{cpf}/access', [SituatorController::class, 'setPeopleAccessByCpf']);
+    Route::delete('/situator/people/{cpf}/access', [SituatorController::class, 'deletePeopleAccessByCpf']);
 });

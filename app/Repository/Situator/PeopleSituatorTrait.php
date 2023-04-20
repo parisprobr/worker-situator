@@ -4,13 +4,15 @@ namespace App\Repository\Situator;
 
 use GuzzleHttp\Client as guzz;
 use GuzzleHttp\Psr7\Request;
+use App\Exceptions\ClientException;
+
 
 trait PeopleSituatorTrait
 {
 
     protected function getFormattedUrlToPeople()
     {
-        return $this->apiUrl . self::ENDPOINT_ACCOUNTS . '/' . $this->accountId . '/' . self::ENDPOINT_PEOPLE;
+        return $this->apiUrl . self::ENDPOINT_ACCOUNTS . '/' . $this->accountId . self::ENDPOINT_PEOPLE;
     }
 
 

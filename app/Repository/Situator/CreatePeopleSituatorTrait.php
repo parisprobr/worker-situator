@@ -5,6 +5,8 @@ namespace App\Repository\Situator;
 use GuzzleHttp\Client as guzz;
 use GuzzleHttp\Psr7\Request;
 use App\Models\PeopleModel;
+use App\Exceptions\ClientException;
+
 
 trait CreatePeopleSituatorTrait
 {
