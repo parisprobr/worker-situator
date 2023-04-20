@@ -16,33 +16,18 @@ class SituatorController extends Controller
         $this->model = new SituatorModel();
     }
 
-    public function createPeople(Request $request)
-    {
-        $request->merge([
-            'idSituator' => $request->header('idSituator'),
-            'idEs'       => $request->get('idEs'),
-            'name'       => $request->get('name'),
-            'active' => $request->get('active'),
-            'gender' => $request->get('gender'),
-            'cpf' => $request->get('cpf'),
-            'document' => $request->get('document'),
-            'email' => $request->get('email'),
-            'personType' => $request->get('personType'),
-            'phone' => $request->get('phone'),
-            'phoneType' => $request->get('phoneType'),
-            'observation' => $request->get('observation'),
-            'birthday' => $request->get('birthday'),
-            'company' => $request->get('company'),
-            'duressPassword' => $request->get('duressPassword'),
-            'responsible' => $request->get('responsible'),
-            'accessPermission' => $request->get('accessPermission')
-        ]);
 
+    public function createPeople(Request $request)
+    {   
+        $request->merge([
+            'idSituator' => $request->header('idSituator')
+        ]);
+        $request->merge($request->all());
+        
         $request->validate([
             'idSituator' => ['required', 'Integer'],
             'idEs'       => ['required', 'Integer']
         ]);
-
 
         $people = new PeopleModel(
             (int) $request->get('idEs'),
@@ -73,7 +58,8 @@ class SituatorController extends Controller
     }
 
     public function deletePeopleByCpf(Request $request)
-    {
+    {   
+
         $request->merge([
             'idSituator' => $request->header('idSituator'),
             'cpf'        => $request->route('cpf'),

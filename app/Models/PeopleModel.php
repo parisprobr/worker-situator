@@ -47,7 +47,8 @@ class PeopleModel
             'duressPassword' => $this->duressPassword,
             'responsible' => $this->responsible,
             'imported' => self::DEFAULT_IMPORTED,
-            'accessPermission' => $this->accessPermission
+            'accessPermission' => $this->accessPermission,
+            'integrationId' => $this->idEs
         );
         return $body;
     }
