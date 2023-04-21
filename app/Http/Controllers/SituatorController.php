@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CredentialModel;
 use App\Models\PeopleAccessModel;
 use Illuminate\Http\Request;
 use App\Models\SituatorModel;
@@ -17,15 +18,15 @@ class SituatorController extends Controller
         $this->model = new SituatorModel();
     }
 
-    
+
 
     public function createPeople(Request $request)
-    {   
+    {
         $request->merge([
             'idSituator' => $request->header('idSituator')
         ]);
         $request->merge($request->all());
-        
+
         $request->validate([
             'idSituator' => ['required', 'Integer'],
             'idEs'       => ['required', 'Integer']
@@ -60,7 +61,7 @@ class SituatorController extends Controller
     }
 
     public function deletePeopleByCpf(Request $request)
-    {   
+    {
 
         $request->merge([
             'idSituator' => $request->header('idSituator'),
@@ -81,7 +82,7 @@ class SituatorController extends Controller
     }
 
     public function setPeopleImage(Request $request)
-    {   
+    {
         $request->merge([
             'idSituator' => $request->header('idSituator'),
             'cpf'        => $request->route('cpf'),
@@ -97,13 +98,13 @@ class SituatorController extends Controller
             'response' => $this->model->setPeopleImage(
                 (int) $request->header('idSituator'),
                 $request->route('cpf'),
-                $request->get('base64')  
+                $request->get('base64')
             )
         ]);
     }
 
     public function getPeopleByCpf(Request $request)
-    {   
+    {
         $request->merge([
             'idSituator' => $request->header('idSituator'),
             'cpf'        => $request->route('cpf'),
@@ -123,8 +124,35 @@ class SituatorController extends Controller
     }
 
 
+    public function createCredential(Request $request)
+    {
+        $request->merge([
+            'idSituator' => $request->header('idSituator'),
+        ]);
+
+        $request->merge($request->all());
+
+        $request->validate([
+            'idSituator' => ['required', 'Integer'],
+            'cardType'   => ['required', 'Integer'],
+            'value'      => ['required', 'Integer'],
+        ]);
+
+        $credential = new CredentialModel(
+            $request->get('cardType'),
+            $request->get('value')
+        );
+
+        return response()->json([
+            'response' => $this->model->createCredential(
+                (int) $request->header('idSituator'),
+                $credential
+            )
+        ]);
+    }
+
     public function getPeopleAccessByCpf(Request $request)
-    {   
+    {
         $request->merge([
             'idSituator' => $request->header('idSituator'),
             'cpf'        => $request->route('cpf'),
@@ -144,7 +172,7 @@ class SituatorController extends Controller
     }
 
     public function deletePeopleAccessByCpf(Request $request)
-    {   
+    {
         $request->merge([
             'idSituator' => $request->header('idSituator'),
             'cpf'        => $request->route('cpf'),
@@ -170,7 +198,7 @@ class SituatorController extends Controller
             'cpf'        => $request->route('cpf'),
         ]);
         $request->merge($request->all());
-        
+
         $request->validate([
             'idSituator' => ['required', 'Integer'],
             'cpf'        => ['required', 'String']
@@ -198,4 +226,26 @@ class SituatorController extends Controller
         ]);
     }
 
+    public function setPeopleCredentialByCpf(Request $request)
+    {
+        $request->merge([
+            'idSituator'    => $request->header('idSituator'),
+            'cpf'           => $request->route('cpf'),
+            'credentialId'  => $request->get('credentialId'),
+        ]);
+
+        $request->validate([
+            'idSituator'   => ['required', 'Integer'],
+            'cpf'          => ['required', 'String'],
+            'credentialId' => ['required', 'Integer']
+        ]);
+
+        return response()->json([
+            'response' => $this->model->setPeopleCredentialByCpf(
+                (int) $request->header('idSituator'),
+                $request->route('cpf'),
+                $request->get('credentialId')
+            )
+        ]);
+    }
 }

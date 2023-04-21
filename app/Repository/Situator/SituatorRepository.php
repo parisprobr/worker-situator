@@ -12,8 +12,8 @@ class SituatorRepository
 
     use LoginSituatorTrait;
     use PeopleSituatorTrait;
-    use CreatePeopleSituatorTrait;
     use AccessSituatorTrait;
+    use CredentialSituatorTrait;
 
     const HEADER                = ['Content-Type' => 'application/json', 'Accept' => 'application/json'];
     const COOKIE_AUTH_NAME      = 'Seventh.Auth';
@@ -23,6 +23,8 @@ class SituatorRepository
     const ENDPOINT_ACCOUNTS     = '/accounts';
     const ENDPOINT_ACCESS       = '/access';
     const ENDPOINT_IMAGE        = '/image';
+    const ENDPOINT_CREDENTIALS  = '/credentials';
+    const ENDPOINT_NEXT_NUMBER  = '/next-number';
     const FILTER_CPF            = 'pagination.filters.cpf=';
     const DEPARTMENT            = 'ES';
     const HTTP_NOT_FOUND        = 404;
@@ -32,6 +34,11 @@ class SituatorRepository
     public function __construct()
     {
         $this->client = new guzz(['cookies' => true]);
+    }
+
+    protected function getFormatedUrlToAccount()
+    {
+        return $this->apiUrl . self::ENDPOINT_ACCOUNTS . '/' . $this->accountId;
     }
 
     

@@ -5,6 +5,8 @@ namespace App\Repository\Situator;
 use GuzzleHttp\Client as guzz;
 use GuzzleHttp\Psr7\Request;
 use App\Exceptions\ClientException;
+use App\Models\CredentialModel;
+use App\Models\PeopleModel;
 
 
 trait PeopleSituatorTrait
@@ -12,9 +14,26 @@ trait PeopleSituatorTrait
 
     protected function getFormattedUrlToPeople()
     {
-        return $this->apiUrl . self::ENDPOINT_ACCOUNTS . '/' . $this->accountId . self::ENDPOINT_PEOPLE;
+        return $this->getFormatedUrlToAccount() . self::ENDPOINT_PEOPLE;
     }
 
+    public function createPeople(PeopleModel $people)
+    {   
+        $body = $people->getBodyToPeopleCreate();
+        $bodyJson = json_encode($body);
+        $request = new Request(
+            'POST',
+            $this->getFormattedUrlToPeople(),
+            self::HEADER,
+            $bodyJson
+        );
+        $res = $this->client->sendAsync($request)->wait();
+        if($res->getStatusCode() != self::HTTP_OK){
+            throw new ClientException('Unable to CreateUser user');
+        }
+        $responseBodyAsString = $res->getBody()->getContents();
+        return json_decode($responseBodyAsString,true);
+    }
 
     public function getPeopleByCpf(string $cpf)
     {
@@ -80,9 +99,29 @@ trait PeopleSituatorTrait
         );
         $res = $this->client->sendAsync($request)->wait();
         if($res->getStatusCode() != self::HTTP_OK){
-            throw new ClientException('Unable to change image for user Id'.$people['id']);
+            throw new ClientException('Unable to change image for People Id:'.$people['id']);
         }
         return 'successfully changed image';
+    }
+
+    public function setPeopleCredential(int $peopleId, int $credentialId)
+    {   
+        $body     = [
+            'id'        => $credentialId,
+            'duress'    => true
+        ];
+        $bodyJson = json_encode($body);
+        $request = new Request(
+            'POST',
+            $this->getFormattedUrlToPeople() . '/' . $peopleId.self::ENDPOINT_CREDENTIALS,
+            self::HEADER,
+            $bodyJson
+        );
+        $res = $this->client->sendAsync($request)->wait();
+        if($res->getStatusCode() != self::HTTP_OK){
+            throw new ClientException('Unable to set Credential to People Id: '.$people['id']);
+        }
+        return 'successfully set Credential';
     }
 
 }

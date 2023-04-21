@@ -2,8 +2,9 @@
 
 namespace App\Models;
 
-use App\Repository\Situator\SituatorRepository;
+use App\Models\CredentialModel;
 use App\Repository\EntradaSeguraRepository;
+use App\Repository\Situator\SituatorRepository;
 
 class SituatorModel
 {
@@ -76,6 +77,19 @@ class SituatorModel
         $this->simpleLogin($idSituator);
         $people = $this->repository->getPeopleByCpf($cpf);
         return $this->repository->setAccessByPeopleId($people['id'],$accessModel);
+    }
+
+    public function setPeopleCredentialByCpf(int $idSituator, string $cpf, int $credetialId)
+    {
+        $this->simpleLogin($idSituator);
+        $people = $this->repository->getPeopleByCpf($cpf);
+        return $this->repository->setPeopleCredential($people['id'],$credetialId);
+    }
+
+    public function createCredential(int $idSituator, CredentialModel $credential)
+    {
+        $this->simpleLogin($idSituator);
+        return $this->repository->createCredential($credential);
     }
 
 }

@@ -25,12 +25,12 @@ trait AccessSituatorTrait
         try {
             $res = $this->client->sendAsync($request)->wait();
         } catch (\Throwable $th) {
-            dd($th->getResponse()->getStatusCode());
+            if ($th->getResponse()->getStatusCode() == self::HTTP_NOT_FOUND) {
+                throw new ClientException('Access not Found with People Id: ' . $peopleId, self::HTTP_NOT_FOUND);
+            }
         }
         $access = json_decode($res->getBody()->getContents(), true);
-        if (!isset($access['access'])) {
-            throw new ClientException('Access not Found with People Id: ' . $peopleId, self::HTTP_NOT_FOUND);
-        }
+        
         return $access['access'];
     }
 
@@ -41,7 +41,13 @@ trait AccessSituatorTrait
             $this->getFormatedUrlToPeopleAccess($peopleId),
             self::HEADER,
         );
-        $res = $this->client->sendAsync($request)->wait();
+        try {
+            $res = $this->client->sendAsync($request)->wait();
+        } catch (\Throwable $th) {
+            if ($th->getResponse()->getStatusCode() == self::HTTP_NOT_FOUND) {
+                throw new ClientException('Access not Found with People Id: ' . $peopleId, self::HTTP_NOT_FOUND);
+            }
+        }
 
         if($res->getStatusCode() == self::HTTP_OK){
             return 'Access deleted successfully for the Id People Id:'.$peopleId;
@@ -66,7 +72,7 @@ trait AccessSituatorTrait
             throw $th;
         }
         if($res->getStatusCode() == self::HTTP_OK){
-            return 'Access created successfully for the Id People Id:'.$peopleId;
+            return 'Access created successfully for the People Id: '.$peopleId;
         }
         throw new ClientException('Access not created');
     }
