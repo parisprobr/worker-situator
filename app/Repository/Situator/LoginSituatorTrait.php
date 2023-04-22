@@ -61,8 +61,18 @@ trait LoginSituatorTrait{
         return $data->id;
     }
 
+
     public function login($apiUrl, $userName, $password, $accountId, $rememberMe)
-    {
+    {   
+        if($this->cookie){
+            try {
+                $this->checkCurrentUser();
+                return ;
+            } catch (\Throwable $th) {
+                //@todo renew Login log
+            }
+        }
+    
         $this->setDataLogin($apiUrl, $userName, $password, $accountId, $rememberMe);
         $body = array(
             'userName'   => $this->userName,
@@ -74,9 +84,7 @@ trait LoginSituatorTrait{
         $bodyJson = json_encode($body);
         $request = new Request('PUT', $this->apiUrl.self::ENDPOINT_LOGIN, self::HEADER, $bodyJson);
         $res = $this->client->sendAsync($request)->wait();
-        $this->setCookieLogin();
         $this->checkCurrentUser();
-        //return($res->getBody()->getContents());  
     }
 
 }

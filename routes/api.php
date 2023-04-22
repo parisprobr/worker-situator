@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EntradaSeguraController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
@@ -28,4 +29,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/situator/people/{cpf}/credential', [SituatorController::class, 'setPeopleCredentialByCpf']);
     Route::delete('/situator/people/{cpf}/access',   [SituatorController::class, 'deletePeopleAccessByCpf']);
     Route::post('/situator/credential',              [SituatorController::class, 'createCredential']);
+    Route::post('/es/people/create',                 [EntradaSeguraController::class, 'createPeopleWithAccess']);
 });

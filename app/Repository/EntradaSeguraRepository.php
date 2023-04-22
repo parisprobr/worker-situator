@@ -3,11 +3,11 @@ namespace App\Repository;
 use Illuminate\Support\Facades\DB;
 
 class EntradaSeguraRepository
-{   
-
+{
     public function getDataLogin(int $idSituator)
     {   
         $dataLogin = [];
+        //https://apidev.entradasegura.com.br/docs
         switch ($idSituator) {
             case 1:
                 $dataLogin = [

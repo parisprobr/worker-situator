@@ -18,8 +18,6 @@ class SituatorController extends Controller
         $this->model = new SituatorModel();
     }
 
-
-
     public function createPeople(Request $request)
     {
         $request->merge([
@@ -62,10 +60,9 @@ class SituatorController extends Controller
 
     public function deletePeopleByCpf(Request $request)
     {
-
         $request->merge([
             'idSituator' => $request->header('idSituator'),
-            'cpf'        => $request->route('cpf'),
+            'cpf'        => $this->getCpf($request),
         ]);
 
         $request->validate([
@@ -76,16 +73,21 @@ class SituatorController extends Controller
         return response()->json([
             'response' => $this->model->deletePeopleByCpf(
                 (int) $request->header('idSituator'),
-                $request->route('cpf'),
+                $this->getCpf($request),
             )
         ]);
     }
 
-    public function setPeopleImage(Request $request)
+    private function getCpf(Request $request)
     {
+        return ($request->route('cpf')) ? $request->route('cpf') : $request->get('cpf');
+    }
+
+    public function setPeopleImage(Request $request)
+    {   
         $request->merge([
             'idSituator' => $request->header('idSituator'),
-            'cpf'        => $request->route('cpf'),
+            'cpf'        => $this->getCpf($request),
             'base64'        => $request->get('base64'),
         ]);
         $request->validate([
@@ -97,7 +99,7 @@ class SituatorController extends Controller
         return response()->json([
             'response' => $this->model->setPeopleImage(
                 (int) $request->header('idSituator'),
-                $request->route('cpf'),
+                $this->getCpf($request),
                 $request->get('base64')
             )
         ]);
@@ -195,7 +197,7 @@ class SituatorController extends Controller
     {
         $request->merge([
             'idSituator' => $request->header('idSituator'),
-            'cpf'        => $request->route('cpf'),
+            'cpf'        => $this->getCpf($request),
         ]);
         $request->merge($request->all());
 
@@ -220,7 +222,7 @@ class SituatorController extends Controller
         return response()->json([
             'response' => $this->model->setPeopleAccessByCpf(
                 (int) $request->header('idSituator'),
-                $request->route('cpf'),
+                $this->getCpf($request),
                 $access
             )
         ]);
@@ -230,7 +232,7 @@ class SituatorController extends Controller
     {
         $request->merge([
             'idSituator'    => $request->header('idSituator'),
-            'cpf'           => $request->route('cpf'),
+            'cpf'           => $this->getCpf($request),
             'credentialId'  => $request->get('credentialId'),
         ]);
 
@@ -243,7 +245,7 @@ class SituatorController extends Controller
         return response()->json([
             'response' => $this->model->setPeopleCredentialByCpf(
                 (int) $request->header('idSituator'),
-                $request->route('cpf'),
+                $this->getCpf($request),
                 $request->get('credentialId')
             )
         ]);
